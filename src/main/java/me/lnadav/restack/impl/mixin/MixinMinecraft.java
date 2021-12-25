@@ -1,4 +1,4 @@
-package com.yourname.modid.mixin;
+package me.lnadav.restack.impl.mixin;
 
 import net.minecraft.client.Minecraft;
 import org.apache.logging.log4j.Logger;
@@ -18,10 +18,15 @@ public abstract class MixinMinecraft {
     @Shadow
     private boolean fullscreen;
 
+    /**
+     *
+     * @author not me
+     */
+
     @Overwrite
     private void createDisplay() throws LWJGLException {
         Display.setResizable(true);
-        Display.setTitle("MyCustomTitle");
+        Display.setTitle("Restack");
         try {
             Display.create((new PixelFormat()).withDepthBits(24));
         } catch (LWJGLException lwjglexception) {

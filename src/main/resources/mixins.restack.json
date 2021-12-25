@@ -1,9 +1,11 @@
 {
   "compatibilityLevel": "JAVA_8",
-  "package": "com.yourname.modid.mixin",
+  "package": "me.lnadav.restack.impl.mixin",
   "mixins": [
     "MixinMinecraft"
   ],
-  "client": [],
+  "client": [
+    "MixinEntityPlayerSP"
+  ],
   "server": []
 }
