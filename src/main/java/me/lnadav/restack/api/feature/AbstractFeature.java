@@ -1,5 +1,8 @@
 package me.lnadav.restack.api.feature;
 
+import ca.weblite.objc.Client;
+import com.mojang.realmsclient.gui.ChatFormatting;
+import me.lnadav.restack.api.chat.ClientChat;
 import me.lnadav.restack.api.setting.AbstractSetting;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
@@ -19,6 +22,9 @@ public abstract class AbstractFeature {
 
     private boolean enabled;
 
+    private boolean expanded;
+    private boolean binding;
+
     /**
      *
      * @param name
@@ -29,6 +35,8 @@ public abstract class AbstractFeature {
         this.name = name;
         this.description = description;
         this.category = category;
+        this.expanded = false;
+        this.binding = false;
     }
 
     public void enable(){
@@ -83,9 +91,14 @@ public abstract class AbstractFeature {
         return enabled;
     }
 
-    public void onEnable(){}
+    public void onEnable(){
+        ClientChat.sendClientMessage(this.getName() + ChatFormatting.GREEN + " enabled");
+    }
 
-    public void onDisable(){}
+    public void onDisable(){
+        ClientChat.sendClientMessage(this.getName() + ChatFormatting.RED + " disabled");
+
+    }
 
     public String getName(){
         return name;
@@ -106,5 +119,21 @@ public abstract class AbstractFeature {
 
     public void setKeybind(int keybind) {
         this.keybind = keybind;
+    }
+
+    public boolean isExpanded() {
+        return expanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
+    }
+
+    public boolean isBinding() {
+        return binding;
+    }
+
+    public void setBinding(boolean value){
+        this.binding = value;
     }
 }

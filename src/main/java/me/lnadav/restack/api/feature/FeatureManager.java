@@ -2,6 +2,7 @@ package me.lnadav.restack.api.feature;
 
 import me.lnadav.restack.api.setting.AbstractSetting;
 import me.lnadav.restack.api.setting.AnnotationReflectionSearcher;
+import me.lnadav.restack.impl.features.client.ClickGUI;
 import me.lnadav.restack.impl.features.misc.TestFeature;
 import me.lnadav.restack.impl.features.movement.Sprint;
 
@@ -15,7 +16,7 @@ public class FeatureManager {
         //Add the features here like a good boy :D
         features.add(new TestFeature());
         features.add(new Sprint());
-
+        features.add(new ClickGUI());
 
         /*
          * Loads the Settings by using reflection, basically im super smart :D

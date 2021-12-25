@@ -36,6 +36,15 @@ public class EnumSetting<T extends Enum<T>> extends AbstractSetting {
         return value;
     }
 
+    public T decrement() {
+        if (value.ordinal() == 0) {
+            value = values[values.length - 1];
+        } else {
+            value = values[value.ordinal() - 1];
+        }
+        return value;
+    }
+
 
     public boolean setValue(String value){
         for(T t: values){

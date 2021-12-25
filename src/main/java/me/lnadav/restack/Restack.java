@@ -3,12 +3,9 @@ package me.lnadav.restack;
 import me.lnadav.restack.api.command.CommandManager;
 import me.lnadav.restack.api.config.ConfigHelper;
 import me.lnadav.restack.api.event.EventHandler;
-import me.lnadav.restack.api.feature.AbstractFeature;
 import me.lnadav.restack.api.feature.FeatureManager;
-import me.lnadav.restack.api.setting.AbstractSetting;
-import me.lnadav.restack.api.setting.settingTypes.BooleanSetting;
-import me.lnadav.restack.api.setting.settingTypes.EnumSetting;
-import me.lnadav.restack.api.setting.settingTypes.FloatSetting;
+import me.lnadav.restack.impl.guis.ClickGuiScreen;
+import me.lnadav.restack.impl.guis.round.ClickGUIRound;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -24,6 +21,7 @@ public class Restack {
     public static final FeatureManager featureManager = new FeatureManager();
     public static final ConfigHelper configHelper = new ConfigHelper();
     public static final CommandManager commandManager = new CommandManager();
+    public static ClickGUIRound clickGuiScreen;
 
     @Mod.EventHandler
     public void onPreInit(FMLPreInitializationEvent event) {
@@ -32,6 +30,8 @@ public class Restack {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) throws IOException {
         MinecraftForge.EVENT_BUS.register(new EventHandler());
+        clickGuiScreen = new ClickGUIRound();
+
     }
 
     @Mod.EventHandler
