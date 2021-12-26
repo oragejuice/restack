@@ -2,10 +2,12 @@ package me.lnadav.restack;
 
 import me.lnadav.restack.api.command.CommandManager;
 import me.lnadav.restack.api.config.ConfigHelper;
+import me.lnadav.restack.api.displayComponent.DisplayComponentManager;
 import me.lnadav.restack.api.event.EventHandler;
 import me.lnadav.restack.api.feature.FeatureManager;
 import me.lnadav.restack.api.util.render.font.FontUtil;
 import me.lnadav.restack.impl.guis.ClickGuiScreen;
+import me.lnadav.restack.impl.guis.HUDEditor;
 import me.lnadav.restack.impl.guis.round.ClickGUIRound;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -23,7 +25,9 @@ public class Restack {
     public static final ConfigHelper configHelper = new ConfigHelper();
     public static final CommandManager commandManager = new CommandManager();
     public static ClickGUIRound clickGuiScreen;
+    public static HUDEditor hudEditor;
     public static boolean CUSTOM_FONT;
+    public static final DisplayComponentManager displayComponentManager = new DisplayComponentManager();
 
     @Mod.EventHandler
     public void onPreInit(FMLPreInitializationEvent event) {
@@ -34,7 +38,7 @@ public class Restack {
     public void init(FMLInitializationEvent event) throws IOException {
         MinecraftForge.EVENT_BUS.register(new EventHandler());
         clickGuiScreen = new ClickGUIRound();
-
+        hudEditor = new HUDEditor();
     }
 
     @Mod.EventHandler

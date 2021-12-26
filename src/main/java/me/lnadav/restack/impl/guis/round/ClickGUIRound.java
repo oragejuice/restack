@@ -428,5 +428,10 @@ public class ClickGUIRound extends GuiScreen /*implements Client.INSTANCE*/
         }
     }
 
+    @Override
+    public boolean doesGuiPauseGame() {
+        return false;
+    }
+
 
 }

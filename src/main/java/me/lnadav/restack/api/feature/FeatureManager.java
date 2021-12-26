@@ -8,6 +8,7 @@ import me.lnadav.restack.impl.features.misc.TestFeature;
 import me.lnadav.restack.impl.features.movement.Sprint;
 import me.lnadav.restack.impl.features.movement.Velocity;
 import me.lnadav.restack.impl.features.render.CustomFont;
+import me.lnadav.restack.impl.features.render.HUDEditor;
 import me.lnadav.restack.impl.features.world.Fakeplayer;
 
 import java.util.ArrayList;
@@ -21,10 +22,13 @@ public class FeatureManager {
         features.add(new TestFeature());
         features.add(new Sprint());
         features.add(new ClickGUI());
-        features.add(new Watermark());
+        //features.add(new Watermark()); //No longer needed as now we have HUD system
         features.add(new CustomFont());
         features.add(new Velocity());
         features.add(new Fakeplayer());
+        features.add(new HUDEditor());
+
+
         /*
          * Loads the Settings by using reflection, basically im super smart :D
          */
