@@ -4,6 +4,7 @@ import me.lnadav.restack.api.setting.AbstractSetting;
 import me.lnadav.restack.api.setting.AnnotationReflectionSearcher;
 import me.lnadav.restack.impl.features.client.ClickGUI;
 import me.lnadav.restack.impl.features.client.Watermark;
+import me.lnadav.restack.impl.features.combat.Aura;
 import me.lnadav.restack.impl.features.misc.TestFeature;
 import me.lnadav.restack.impl.features.movement.NCPSneak;
 import me.lnadav.restack.impl.features.movement.Sprint;
@@ -29,6 +30,7 @@ public class FeatureManager {
         features.add(new Fakeplayer());
         features.add(new HUDEditor());
         features.add(new NCPSneak());
+        features.add(new Aura());
 
         /*
          * Loads the Settings by using reflection, basically im super smart :D

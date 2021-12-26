@@ -15,6 +15,13 @@ public class Rotation implements Comparable<Rotation>{
     public final boolean strict;
     public final int yawstep;
 
+    /**
+     *
+     * @param pos
+     * @param priority
+     * @param strict
+     * @param yawstep
+     */
     public Rotation(Vec3d pos, int priority, boolean strict, int yawstep){
         this.pos = pos;
         this.priority = priority;

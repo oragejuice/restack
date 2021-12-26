@@ -42,6 +42,8 @@ public class Restack {
         clickGuiScreen = new ClickGUIRound();
         hudEditor = new HUDEditor();
         rotationManager = new RotationManager();
+        MinecraftForge.EVENT_BUS.register(rotationManager);
+
     }
 
     @Mod.EventHandler
