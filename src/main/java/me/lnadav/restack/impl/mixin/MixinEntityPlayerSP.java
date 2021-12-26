@@ -1,7 +1,8 @@
 package me.lnadav.restack.impl.mixin;
 
 import com.mojang.authlib.GameProfile;
-import me.lnadav.restack.api.events.MoveEvent;
+import me.lnadav.restack.api.event.events.MoveEvent;
+import me.lnadav.restack.api.event.events.PlayerUpdateEvent;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.MoverType;
@@ -9,7 +10,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
 @Mixin(value = EntityPlayerSP.class, priority = 634756347)
@@ -27,6 +30,11 @@ public class MixinEntityPlayerSP extends AbstractClientPlayer {
         MinecraftForge.EVENT_BUS.post(event);
 
         if (!event.isCanceled()) super.move(event.getType(), event.getX(), event.getY(), event.getZ());
+    }
+
+    @Inject(method = "onUpdate", at = @At("HEAD"))
+    public void onPlayerUpdate(CallbackInfo ci) {
+        MinecraftForge.EVENT_BUS.post(new PlayerUpdateEvent());
     }
 
 

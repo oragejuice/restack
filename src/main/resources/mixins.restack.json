@@ -2,7 +2,9 @@
   "compatibilityLevel": "JAVA_8",
   "package": "me.lnadav.restack.impl.mixin",
   "mixins": [
-    "MixinMinecraft"
+    "MixinEntity",
+    "MixinMinecraft",
+    "MixinNetworkManager"
   ],
   "client": [
     "MixinEntityPlayerSP"

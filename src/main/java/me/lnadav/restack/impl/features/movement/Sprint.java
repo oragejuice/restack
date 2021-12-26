@@ -2,7 +2,7 @@ package me.lnadav.restack.impl.features.movement;
 
 import me.lnadav.restack.api.feature.AbstractFeature;
 import me.lnadav.restack.api.feature.Category;
-import me.lnadav.restack.api.events.MoveEvent;
+import me.lnadav.restack.api.event.events.MoveEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class Sprint extends AbstractFeature {

@@ -3,8 +3,12 @@ package me.lnadav.restack.api.feature;
 import me.lnadav.restack.api.setting.AbstractSetting;
 import me.lnadav.restack.api.setting.AnnotationReflectionSearcher;
 import me.lnadav.restack.impl.features.client.ClickGUI;
+import me.lnadav.restack.impl.features.client.Watermark;
 import me.lnadav.restack.impl.features.misc.TestFeature;
 import me.lnadav.restack.impl.features.movement.Sprint;
+import me.lnadav.restack.impl.features.movement.Velocity;
+import me.lnadav.restack.impl.features.render.CustomFont;
+import me.lnadav.restack.impl.features.world.Fakeplayer;
 
 import java.util.ArrayList;
 
@@ -17,7 +21,10 @@ public class FeatureManager {
         features.add(new TestFeature());
         features.add(new Sprint());
         features.add(new ClickGUI());
-
+        features.add(new Watermark());
+        features.add(new CustomFont());
+        features.add(new Velocity());
+        features.add(new Fakeplayer());
         /*
          * Loads the Settings by using reflection, basically im super smart :D
          */

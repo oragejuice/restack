@@ -1,4 +1,4 @@
-package me.lnadav.restack.api.events;
+package me.lnadav.restack.api.event.events;
 
 import net.minecraft.entity.MoverType;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;

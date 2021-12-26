@@ -4,16 +4,16 @@ import ca.weblite.objc.Client;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.lnadav.restack.api.chat.ClientChat;
 import me.lnadav.restack.api.setting.AbstractSetting;
+import me.lnadav.restack.api.util.Globals;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
 
-public abstract class AbstractFeature {
+public abstract class AbstractFeature implements Globals {
 
     private ArrayList<AbstractSetting> settings = new ArrayList<>();
 
-    protected Minecraft mc = Minecraft.getMinecraft();
 
     private String name;
     private String description;

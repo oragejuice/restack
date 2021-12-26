@@ -16,5 +16,6 @@ public class ClickGUI extends AbstractFeature {
     @Override
     public void onEnable(){
         mc.displayGuiScreen(Restack.clickGuiScreen);
+        this.setEnabled(false);
     }
 }

@@ -4,6 +4,7 @@ import me.lnadav.restack.api.command.CommandManager;
 import me.lnadav.restack.api.config.ConfigHelper;
 import me.lnadav.restack.api.event.EventHandler;
 import me.lnadav.restack.api.feature.FeatureManager;
+import me.lnadav.restack.api.util.render.font.FontUtil;
 import me.lnadav.restack.impl.guis.ClickGuiScreen;
 import me.lnadav.restack.impl.guis.round.ClickGUIRound;
 import net.minecraftforge.common.MinecraftForge;
@@ -22,9 +23,11 @@ public class Restack {
     public static final ConfigHelper configHelper = new ConfigHelper();
     public static final CommandManager commandManager = new CommandManager();
     public static ClickGUIRound clickGuiScreen;
+    public static boolean CUSTOM_FONT;
 
     @Mod.EventHandler
     public void onPreInit(FMLPreInitializationEvent event) {
+        FontUtil.load();
     }
 
     @Mod.EventHandler
@@ -38,10 +41,7 @@ public class Restack {
     public void onPostInit(FMLPostInitializationEvent event){
 
         System.out.println("Re:stack loaded");
-
         configHelper.loadConfig();
-
-
         configHelper.saveConfig();
     }
 }

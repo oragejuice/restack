@@ -1,12 +1,14 @@
 package me.lnadav.restack.impl.guis.round;
 
 import me.lnadav.restack.Restack;
+import me.lnadav.restack.api.chat.ClientChat;
 import me.lnadav.restack.api.feature.AbstractFeature;
 import me.lnadav.restack.api.feature.Category;
 import me.lnadav.restack.api.setting.AbstractSetting;
 import me.lnadav.restack.api.setting.settingTypes.BooleanSetting;
 import me.lnadav.restack.api.setting.settingTypes.EnumSetting;
 import me.lnadav.restack.api.setting.settingTypes.FloatSetting;
+import me.lnadav.restack.api.util.render.font.FontUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
@@ -15,6 +17,9 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
+
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 /**
  * @Author Yoink
@@ -28,8 +33,22 @@ public class ClickGUIRound extends GuiScreen /*implements Client.INSTANCE*/
     private boolean B = false;
     private boolean D = false;
     private Category draggingCategory = null;
+    private int draggingSettingX;
+    private int draggingSettingY;
+    private int draggingSettingW;
+    private int draggingSettingH;
+    private FloatSetting draggingSetting = null;
     private int xB = 0;
     private int yB = 0;
+
+    public ClickGUIRound(){
+        int x = 10;
+        for(Category category : Category.values()){
+            category.setX(x);
+            category.setY(10);
+            x += 130;
+        }
+    }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
@@ -52,36 +71,36 @@ public class ClickGUIRound extends GuiScreen /*implements Client.INSTANCE*/
                 category.setX(mX - xB);
                 category.setY(mY - yB);
             }
-            drawCategory(category);
+            drawCategory(category, mX, mY);
         }
     }
 
-    public void drawCategory(Category category)
+    public void drawCategory(Category category, int mX, int mY)
     {
 
         // Draws the Category Box
         drawBox(category.getX(), category.getY(), 80, getCategoryHeight(category), 5, 30, 30, 30, 255);
 
         // Draws the Category Name
-        mc.fontRenderer.drawString(category.toString(), (int) (category.getX() + 40 - mc.fontRenderer.getStringWidth(category.toString()) / 2f), category.getY() + 1, 0xffffffff);
+        FontUtil.drawString(category.toString(), (int) (category.getX() + 40 - FontUtil.getStringWidth(category.toString()) / 2f), category.getY() + 1, 0xffffffff);
 
         // Draws the separator
         drawBox(category.getX() + 8, category.getY() + 16, 64, 1, 1, 255, 255, 255, 255);
 
-        drawModules(category);
+        drawModules(category, mX, mY);
     }
 
-    public void drawModules(Category category)
+    public void drawModules(Category category, int mX, int mY)
     {
         int H = 25;
         for (AbstractFeature feature : Restack.featureManager.getFeaturesFromCategory(category))
         {
-            drawModule(category, feature, H);
+            drawModule(category, feature, H, mX, mY);
             H += 20;
         }
     }
 
-    public void drawModule(Category category, AbstractFeature feature, int H)
+    public void drawModule(Category category, AbstractFeature feature, int H, int mX, int mY)
     {
 
         int color;
@@ -95,31 +114,31 @@ public class ClickGUIRound extends GuiScreen /*implements Client.INSTANCE*/
         }
 
         // Draw module Strings
-        mc.fontRenderer.drawString(feature.getName(), (int) (category.getX() + 40 - mc.fontRenderer.getStringWidth(feature.getName()) / 2f), category.getY() + H, color);
+        FontUtil.drawString(feature.getName(), (int) (category.getX() + 40 - FontUtil.getStringWidth(feature.getName()) / 2f), category.getY() + H, color);
 
         if (feature.isExpanded())
         {
             // Draw settings for module
-            drawSettings(feature, category.getX() + 80 + 12, category.getY() + H);
+            drawSettings(feature, category.getX() + 80 + 10, category.getY() + H, mX, mY);
         }
     }
 
-    public void drawSettings(AbstractFeature feature, int X, int Y)
+    public void drawSettings(AbstractFeature feature, int X, int Y, int mX, int mY)
     {
 
         // Setting count + 1(bind)
         int i = feature.getSettings().size() + 1;
 
         // Draw setting box
-        drawBox(X, Y, 100, i * 12, 5, 30, 30, 30, 255);
+        drawBox(X, Y, 100, i * 14, 5, 30, 30, 30, 255);
 
         int H = Y + 2;
 
         for (AbstractSetting setting : feature.getSettings())
         {
             // Draw each setting in module
-            drawSetting(setting, X, H);
-            H += 12;
+            drawSetting(setting, X, H, mX, mY);
+            H += 14;
         }
 
         if (!feature.isBinding())
@@ -135,17 +154,17 @@ public class ClickGUIRound extends GuiScreen /*implements Client.INSTANCE*/
                 keyName = "NONE";
             }
             // if not listening
-            mc.fontRenderer.drawString("Bind", X + 2, H, 0xffffffff);
-            mc.fontRenderer.drawString(keyName, X + 100 - mc.fontRenderer.getStringWidth(keyName) - 2, H, 0xffffffff);
+            FontUtil.drawString("Bind", X + 2, H, 0xffffffff);
+            FontUtil.drawString(keyName, X + 100 - FontUtil.getStringWidth(keyName) - 2, H, 0xffffffff);
         }
         else
         {
             // if Listening
-            mc.fontRenderer.drawString("Key...", X + 2, H, 0xffffffff);
+            FontUtil.drawString("Key...", X + 2, H, 0xffffffff);
         }
     }
 
-    public void drawSetting(AbstractSetting setting, int X, int Y)
+    public void drawSetting(AbstractSetting setting, int X, int Y, int mX, int mY)
     {
         String settingValue = "";
 
@@ -154,8 +173,37 @@ public class ClickGUIRound extends GuiScreen /*implements Client.INSTANCE*/
         if (setting instanceof EnumSetting) settingValue = String.valueOf(((EnumSetting<?>) setting).getValue());
 
         // Draw setting and value
-        mc.fontRenderer.drawString(capFirstLetter(setting.getName()), X + 2, Y, 0xffffffff);
-        mc.fontRenderer.drawString(capFirstLetter(settingValue), X + 100 - mc.fontRenderer.getStringWidth(settingValue) - 2, Y, 0xffffffff);
+        FontUtil.drawString(capFirstLetter(setting.getName()), X + 2, Y, 0xffffffff);
+        FontUtil.drawString(capFirstLetter(settingValue), X + 100 - FontUtil.getStringWidth(settingValue) - 2, Y, 0xffffffff);
+
+        //Draw bar for float settings
+        if(setting instanceof  FloatSetting){
+            FloatSetting floatSetting = (FloatSetting) setting;
+            float range = floatSetting.getMax() - floatSetting.getMin();
+            float perc = ((floatSetting.getValue() - floatSetting.getMin()) / range)*100;
+            drawBox(X, Y+FontUtil.getFontHeight(), (int) perc, 1, 0, 255,255,255,255);
+
+
+
+            final double diff = Math.min(draggingSettingW, Math.max(0, mX - draggingSettingX));
+            final double min = ((FloatSetting) setting).getMin();
+            final double max = ((FloatSetting) setting).getMax();
+            int sliderWidth = (int) ((draggingSettingW - 6) * (((FloatSetting) setting).getValue() - min) / (max - min));
+            if (draggingSetting == setting)
+            {
+                if (diff == 0.0)
+                {
+                    ((FloatSetting) setting).setValue(((FloatSetting) setting).getMin());
+                }
+                else
+                {
+                    double newValue = diff / draggingSettingW * (max - min) + min;
+                    ((FloatSetting) setting).setValue((float) Math.round(newValue*10)*0.1);
+                }
+            }
+        }
+
+
     }
 
     public void processClick(int mX, int mY, int mB)
@@ -172,7 +220,7 @@ public class ClickGUIRound extends GuiScreen /*implements Client.INSTANCE*/
             int H = 25;
             for (AbstractFeature feature : Restack.featureManager.getFeaturesFromCategory(category))
             {
-                if (isHover(category.getX() + 5, category.getY() + H - 5, 75, mc.fontRenderer.FONT_HEIGHT + 5, mX, mY))
+                if (isHover(category.getX() + 5, category.getY() + H - 5, 75, FontUtil.getFontHeight() + 5, mX, mY))
                 {
                     switch (mB)
                     {
@@ -193,18 +241,18 @@ public class ClickGUIRound extends GuiScreen /*implements Client.INSTANCE*/
 
                 if (feature.isExpanded())
                 {
-                    int sX = category.getX() + 80 + 12;
+                    int sX = category.getX() + 80 + 14;
                     int sY = category.getY() + H;
                     for (AbstractSetting setting : feature.getSettings())
                     {
-                        if (isHover(sX, sY, 100, mc.fontRenderer.FONT_HEIGHT, mX, mY))
+                        if (isHover(sX, sY, 100, FontUtil.getFontHeight(), mX, mY))
                         {
-                            processClickSetting(setting, mX, mY, sX, sY - 2, 102, mc.fontRenderer.FONT_HEIGHT + 4, mB);
+                            processClickSetting(setting, mX, mY, sX, sY - 2, 102, FontUtil.getFontHeight() + 4, mB);
                         }
-                        sY += 12;
+                        sY += 14;
                     }
 
-                    if (isHover(sX, sY, 100, mc.fontRenderer.FONT_HEIGHT, mX, mY))
+                    if (isHover(sX, sY, 100, FontUtil.getFontHeight(), mX, mY))
                     {
                         if (!feature.isBinding()) feature.setBinding(true);
                         B = true;
@@ -224,6 +272,7 @@ public class ClickGUIRound extends GuiScreen /*implements Client.INSTANCE*/
         }
 
         //TODO make this a nice looking slider and not what the fuck this is
+        /*
         if (setting instanceof FloatSetting)
         {
             float s = ((FloatSetting) setting).getValue();
@@ -248,6 +297,22 @@ public class ClickGUIRound extends GuiScreen /*implements Client.INSTANCE*/
                 ((FloatSetting) setting).setValue(s);
             }
         }
+         */
+
+        if(setting instanceof FloatSetting)
+        {
+
+            if(isHover(X,Y,W,H,mX,mY)){
+                draggingSetting = (FloatSetting) setting;
+                draggingSettingX = X;
+                draggingSettingW = W;
+                draggingSettingH = H;
+                draggingSettingY = Y;
+            }
+
+
+        }
+
         if (setting instanceof EnumSetting)
         {
             processEnumClick((EnumSetting) setting, mB);
@@ -258,6 +323,7 @@ public class ClickGUIRound extends GuiScreen /*implements Client.INSTANCE*/
     protected void mouseReleased(int mouseX, int mouseY, int state)
     {
         draggingCategory = null;
+        draggingSetting = null;
         D = false;
     }
 
