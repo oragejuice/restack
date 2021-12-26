@@ -271,34 +271,6 @@ public class ClickGUIRound extends GuiScreen /*implements Client.INSTANCE*/
             return;
         }
 
-        //TODO make this a nice looking slider and not what the fuck this is
-        /*
-        if (setting instanceof FloatSetting)
-        {
-            float s = ((FloatSetting) setting).getValue();
-            if (isHover(X, Y, W / 4, H, mX, mY))
-            {
-                s -= 5;
-            }
-            else if (isHover(X + W / 4, Y, W / 4, H, mX, mY))
-            {
-                s -= 1;
-            }
-            else if (isHover(X + W / 2, Y, W / 4, H, mX, mY))
-            {
-                s += 1;
-            }
-            else if (isHover(X + W / 4 * 3, Y, W / 4, H, mX, mY))
-            {
-                s += 5;
-            }
-            if (((FloatSetting) setting).getMin() <= s && ((FloatSetting) setting).getMax() >= s)
-            {
-                ((FloatSetting) setting).setValue(s);
-            }
-        }
-         */
-
         if(setting instanceof FloatSetting)
         {
 

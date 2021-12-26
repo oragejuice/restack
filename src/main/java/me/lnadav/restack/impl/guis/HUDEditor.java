@@ -1,6 +1,7 @@
 package me.lnadav.restack.impl.guis;
 
 import me.lnadav.restack.Restack;
+import me.lnadav.restack.api.config.ConfigHelper;
 import me.lnadav.restack.api.displayComponent.AbstractDisplayComponent;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -77,16 +78,21 @@ public class HUDEditor extends GuiScreen {
                 dragComponent.setX(2);
             }
             double Yscaled = ((double) (dragComponent.getY() + dragComponent.getHeight() ) )/ (double) screenHeight;
-            if(Xscaled > 0.95){
-                dragComponent.setX(screenHeight - dragComponent.getHeight() - 2);
-            } else if (Xscaled < 0.05){
-                dragComponent.setY(2);
+            if(Yscaled > 0.95){
+                dragComponent.setY(screenHeight - dragComponent.getHeight() - 2);
+            } else if (Yscaled < 0.05){
+                dragComponent.setY(4);
             }
         }
 
 
 
         dragComponent = null;
+    }
+
+    @Override
+    public void onGuiClosed(){
+        Restack.configHelper.saveHUD();
     }
 
     @Override

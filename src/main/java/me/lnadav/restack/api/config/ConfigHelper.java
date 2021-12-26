@@ -3,6 +3,7 @@ package me.lnadav.restack.api.config;
 import com.moandjiezana.toml.Toml;
 import com.moandjiezana.toml.TomlWriter;
 import me.lnadav.restack.Restack;
+import me.lnadav.restack.api.displayComponent.AbstractDisplayComponent;
 import me.lnadav.restack.api.feature.AbstractFeature;
 import me.lnadav.restack.api.setting.AbstractSetting;
 import me.lnadav.restack.api.setting.settingTypes.BooleanSetting;
@@ -72,6 +73,33 @@ public class ConfigHelper {
         } catch (IOException e) {
             System.out.println("Unable to create main config file");
             e.printStackTrace();
+        }
+    }
+
+    public void saveHUD(){
+
+        TomlWriter tomlWriter = new TomlWriter();
+
+        for(AbstractDisplayComponent component : Restack.displayComponentManager.getDisplayComponents()){
+            File componentFile = new File("Restack/" + component.getName() + ".toml");
+
+            if(!componentFile.exists()){
+                try {
+                    componentFile.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            HashMap<String, Object> settings = new HashMap<>();
+            settings.put("X",component.getX());
+            settings.put("Y",component.getY());
+            settings.put("enabled", component.isEnabled());
+            try {
+                tomlWriter.write(settings, componentFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -163,6 +191,18 @@ public class ConfigHelper {
                 }
 
             }
+        }
+
+        for(AbstractDisplayComponent component : Restack.displayComponentManager.getDisplayComponents()){
+
+            File componentFile = new File("Restack/" + component.getName() + ".toml");
+            if(!componentFile.exists()){
+                saveHUD();
+            }
+            Toml componentTomlFile = new Toml().read(componentFile);
+            component.setX(componentTomlFile.getLong("X").intValue());
+            component.setY(componentTomlFile.getLong("Y").intValue());
+            component.setEnabled(componentTomlFile.getBoolean("enabled"));
         }
 
         File mainConfigTomlFile = new File("Restack/main.toml");

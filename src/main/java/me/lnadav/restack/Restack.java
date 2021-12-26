@@ -5,6 +5,7 @@ import me.lnadav.restack.api.config.ConfigHelper;
 import me.lnadav.restack.api.displayComponent.DisplayComponentManager;
 import me.lnadav.restack.api.event.EventHandler;
 import me.lnadav.restack.api.feature.FeatureManager;
+import me.lnadav.restack.api.rotations.RotationManager;
 import me.lnadav.restack.api.util.render.font.FontUtil;
 import me.lnadav.restack.impl.guis.ClickGuiScreen;
 import me.lnadav.restack.impl.guis.HUDEditor;
@@ -27,6 +28,7 @@ public class Restack {
     public static ClickGUIRound clickGuiScreen;
     public static HUDEditor hudEditor;
     public static boolean CUSTOM_FONT;
+    public static RotationManager rotationManager;
     public static final DisplayComponentManager displayComponentManager = new DisplayComponentManager();
 
     @Mod.EventHandler
@@ -39,6 +41,7 @@ public class Restack {
         MinecraftForge.EVENT_BUS.register(new EventHandler());
         clickGuiScreen = new ClickGUIRound();
         hudEditor = new HUDEditor();
+        rotationManager = new RotationManager();
     }
 
     @Mod.EventHandler

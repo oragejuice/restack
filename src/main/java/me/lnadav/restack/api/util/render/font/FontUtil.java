@@ -1,6 +1,7 @@
 package me.lnadav.restack.api.util.render.font;
 
 import me.lnadav.restack.Restack;
+import me.lnadav.restack.api.chat.ClientChat;
 import me.lnadav.restack.api.util.Globals;
 
 import java.io.InputStream;
@@ -8,6 +9,10 @@ import java.io.InputStream;
 public class FontUtil implements Globals {
 
     private static FontRenderer globalFont;
+
+    public static void load(String name){
+        globalFont = new FontRenderer(getFont(name, 40));
+    }
 
     public static void load() {
         globalFont = new FontRenderer(getFont("Inconsolata", 40));
@@ -64,6 +69,7 @@ public class FontUtil implements Globals {
             return awtClientFont;
         } catch (Exception exception) {
             exception.printStackTrace();
+            ClientChat.sendClientMessage(fontName + " - Font not found [Inconsolata, Waterfall, YujiHentai]");
             return new java.awt.Font("default", java.awt.Font.PLAIN, (int) size);
         }
     }

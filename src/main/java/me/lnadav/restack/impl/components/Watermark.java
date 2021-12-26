@@ -13,6 +13,8 @@ public class Watermark extends AbstractDisplayComponent {
 
     @Override
     public void draw(){
-        FontUtil.drawString("[re:stack]",this.x+2, this.y+2, new Color(255,255,255,255).getRGB());
+        this.height = FontUtil.getFontHeight() + 2;
+        this.width = FontUtil.getStringWidth("[re:stack]" + 2);
+        FontUtil.drawString("[re:stack]",this.x+1, this.y+1, new Color(255,255,255,255).getRGB());
     }
 }

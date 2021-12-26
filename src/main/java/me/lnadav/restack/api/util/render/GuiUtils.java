@@ -2,13 +2,26 @@ package me.lnadav.restack.api.util.render;
 
 import me.lnadav.restack.Restack;
 import me.lnadav.restack.api.feature.Category;
+import me.lnadav.restack.api.util.Globals;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
-public class GuiUtils {
+public class GuiUtils implements Globals {
+
+
+    public static boolean isOnBottomHalf(int y){
+        int screenHeight = new ScaledResolution(mc).getScaledHeight();
+        return y > screenHeight / 2;
+    }
+
+    public static boolean isOnRightHalf(int x){
+        int screenWidth = new ScaledResolution(mc).getScaledWidth();
+        return x > screenWidth / 2;
+    }
 
     public static void drawBox(int X, int Y, int W, int H, int R, int r, int g, int b, int a)
     {

@@ -5,6 +5,7 @@ import me.lnadav.restack.api.setting.AnnotationReflectionSearcher;
 import me.lnadav.restack.impl.features.client.ClickGUI;
 import me.lnadav.restack.impl.features.client.Watermark;
 import me.lnadav.restack.impl.features.misc.TestFeature;
+import me.lnadav.restack.impl.features.movement.NCPSneak;
 import me.lnadav.restack.impl.features.movement.Sprint;
 import me.lnadav.restack.impl.features.movement.Velocity;
 import me.lnadav.restack.impl.features.render.CustomFont;
@@ -27,7 +28,7 @@ public class FeatureManager {
         features.add(new Velocity());
         features.add(new Fakeplayer());
         features.add(new HUDEditor());
-
+        features.add(new NCPSneak());
 
         /*
          * Loads the Settings by using reflection, basically im super smart :D
@@ -51,6 +52,16 @@ public class FeatureManager {
             }
         }
         return null;
+    }
+
+    public ArrayList<AbstractFeature> getEnabledFeatures(){
+        ArrayList<AbstractFeature> ret = new ArrayList<>();
+        for(AbstractFeature f : features){
+            if(f.isEnabled()){
+                ret.add(f);
+            }
+        }
+        return ret;
     }
 
     public ArrayList<AbstractFeature> getFeaturesFromCategory(Category category){

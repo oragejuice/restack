@@ -1,8 +1,10 @@
 package me.lnadav.restack.api.rotations;
 
+import me.lnadav.restack.Restack;
 import me.lnadav.restack.api.util.Globals;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 
 public class RotationUtil implements Globals {
 
@@ -17,6 +19,13 @@ public class RotationUtil implements Globals {
                 (mc.player.rotationYaw + MathHelper.wrapDegrees(yaw - mc.player.rotationYaw)) % 360F,
                 (mc.player.rotationPitch + MathHelper.wrapDegrees(pitch - mc.player.rotationPitch)) % 360F,
         };
+    }
+
+    public static float[] getYawSteppedRotation(Vec3d target, int yawStep){
+        float serverYaw = RotationManager.getServerYaw();
+        float[] req = getRotations(target.x, target.y, target.z);
+        req[0] = Math.min(yawStep, req[0]);
+        return req;
     }
 
     public static float[] getRotations(EntityLivingBase entity) {

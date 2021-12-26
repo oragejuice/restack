@@ -1,5 +1,6 @@
 package me.lnadav.restack.api.displayComponent;
 
+import me.lnadav.restack.impl.components.EnabledFeatures;
 import me.lnadav.restack.impl.components.Watermark;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ public class DisplayComponentManager {
     public DisplayComponentManager(){
 
         displayComponents.add(new Watermark());
+        displayComponents.add(new EnabledFeatures());
 
     }
 

@@ -23,6 +23,7 @@ public class CommandManager {
         commands.add(new Settings());
         commands.add(new Set());
         commands.add(new Prefix());
+        commands.add(new Font());
 
     }
 
