@@ -17,6 +17,8 @@ public abstract class MixinEntity {
     public void move(MoverType type, double x, double y, double z){
     }
 
+
+
     @Shadow
     public abstract boolean removeTag(String tag);
 

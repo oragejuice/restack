@@ -8,6 +8,16 @@ import net.minecraft.util.math.Vec3d;
 
 public class RotationUtil implements Globals {
 
+    public static float[] getRotations(EntityLivingBase entity) {
+        if (entity == null)
+            return null;
+        return getRotations(entity.posX, entity.posY + ((double) entity.getEyeHeight() / 2F), entity.posZ);
+    }
+
+    public static float[] getRotations(Vec3d vec){
+        return getRotations(vec.x, vec.y, vec.z);
+    }
+
     public static float[] getRotations(double x, double y, double z) {
         double xSize = x - mc.player.posX;
         double ySize = y - (mc.player.posY + mc.player.getEyeHeight());
@@ -22,15 +32,43 @@ public class RotationUtil implements Globals {
     }
 
     public static float[] getYawSteppedRotation(Vec3d target, int yawStep){
-        float serverYaw = RotationManager.getServerYaw();
+        float serverYaw = Restack.rotationManager.getServerYaw();
         float[] req = getRotations(target.x, target.y, target.z);
         req[0] = Math.min(yawStep, req[0]);
         return req;
     }
-
-    public static float[] getRotations(EntityLivingBase entity) {
-        if (entity == null)
-            return null;
-        return getRotations(entity.posX, entity.posY + ((double) entity.getEyeHeight() / 2F), entity.posZ);
+    /*
+    public static float doYawStep(float current, float target, float step){
+        float diff = -getAngleDifference(current, target);
+        if(Math.abs(diff) < step) return target;
+        else {
+            return current + (diff > 0 ? Math.min(diff,step) : -Math.min(-diff, step));
+        }
     }
+
+    public static float getAngleDifference(float from, float to) {
+        return Math.abs(from - to) % 360;
+    }
+
+     */
+
+    public static float limitAngle(float current, float target, float step){
+
+        float diffYaw = MathHelper.wrapDegrees((float) (target - current));
+        float diff = MathHelper.wrapDegrees((float) (target - current));
+
+        if (diffYaw > step) {
+            diffYaw = (float) (step);
+        } else if (diffYaw < -step) {
+            diffYaw = (float) (-step);
+        }
+
+        return current + Math.min(diffYaw, Math.abs(diff));
+    }
+
+
+
+
+
+
 }

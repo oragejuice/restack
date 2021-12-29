@@ -7,7 +7,8 @@
     "MixinNetworkManager"
   ],
   "client": [
-    "MixinEntityPlayerSP"
+    "MixinEntityPlayerSP",
+    "MixinRenderLivingBase"
   ],
   "server": []
 }
