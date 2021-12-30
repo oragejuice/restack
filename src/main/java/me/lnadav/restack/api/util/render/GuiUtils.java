@@ -13,6 +13,8 @@ import org.lwjgl.opengl.GL11;
 public class GuiUtils implements Globals {
 
 
+
+
     public static boolean isOnBottomHalf(int y){
         int screenHeight = new ScaledResolution(mc).getScaledHeight();
         return y > screenHeight / 2;

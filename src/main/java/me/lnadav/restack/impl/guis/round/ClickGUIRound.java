@@ -80,6 +80,7 @@ public class ClickGUIRound extends GuiScreen /*implements Client.INSTANCE*/
 
         // Draws the Category Box
         drawBox(category.getX(), category.getY(), 80, getCategoryHeight(category), 5, 30, 30, 30, 255);
+        drawBox(category.getX(), category.getY(), 80, getCategoryHeight(category), 5, 30, 30, 30, 255);
 
         // Draws the Category Name
         FontUtil.drawString(category.toString(), (int) (category.getX() + 40 - FontUtil.getStringWidth(category.toString()) / 2f), category.getY() + 1, 0xffffffff);

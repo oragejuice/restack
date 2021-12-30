@@ -11,6 +11,7 @@ import me.lnadav.restack.impl.features.movement.Sprint;
 import me.lnadav.restack.impl.features.movement.Velocity;
 import me.lnadav.restack.impl.features.render.CustomFont;
 import me.lnadav.restack.impl.features.render.HUDEditor;
+import me.lnadav.restack.impl.features.render.TWMFeature;
 import me.lnadav.restack.impl.features.world.Fakeplayer;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class FeatureManager {
         features.add(new HUDEditor());
         features.add(new NCPSneak());
         features.add(new Aura());
+        features.add(new TWMFeature());
 
         /*
          * Loads the Settings by using reflection, basically im super smart :D

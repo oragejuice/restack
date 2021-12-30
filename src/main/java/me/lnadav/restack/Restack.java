@@ -8,6 +8,7 @@ import me.lnadav.restack.api.feature.FeatureManager;
 import me.lnadav.restack.api.rotations.RotationHandler;
 import me.lnadav.restack.api.util.render.font.FontUtil;
 import me.lnadav.restack.impl.guis.HUDEditor;
+import me.lnadav.restack.impl.guis.otwm.TWMGui;
 import me.lnadav.restack.impl.guis.round.ClickGUIRound;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -26,9 +27,11 @@ public class Restack {
     public static final CommandManager commandManager = new CommandManager();
     public static ClickGUIRound clickGuiScreen;
     public static HUDEditor hudEditor;
+    public static TWMGui twmGui;
     public static boolean CUSTOM_FONT;
     public static RotationHandler rotationManager;
     public static final DisplayComponentManager displayComponentManager = new DisplayComponentManager();
+
 
     @Mod.EventHandler
     public void onPreInit(FMLPreInitializationEvent event) {
@@ -40,6 +43,7 @@ public class Restack {
         MinecraftForge.EVENT_BUS.register(new EventHandler());
         clickGuiScreen = new ClickGUIRound();
         hudEditor = new HUDEditor();
+        twmGui = new TWMGui();
         rotationManager = new RotationHandler();
         MinecraftForge.EVENT_BUS.register(rotationManager);
 

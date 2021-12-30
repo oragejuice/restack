@@ -37,7 +37,6 @@ public class RotationHandler implements Globals {
 
     }
 
-
     public void rotateToNext(Vec3d target){
         float[] req = RotationUtil.getRotations(target.x, target.y, target.z);
         nextserverYaw = req[0];
