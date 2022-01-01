@@ -44,7 +44,7 @@ public class Terminal extends AbstractProgram {
             }
 
             else if(keyCode == Keyboard.KEY_Q){
-                getParent()
+                getParent().killProcess(this);
             }
 
 

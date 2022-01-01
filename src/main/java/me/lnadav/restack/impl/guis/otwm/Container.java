@@ -54,8 +54,8 @@ public class Container extends AbstractProgram {
         children.add(new Container(x, y, width, height, this));
     }
 
-    public void killOrphan(Container container){
-
+    public void killProcess(AbstractProgram program){
+        children.remove(program);
     }
 
     @Override
