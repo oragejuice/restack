@@ -33,11 +33,10 @@ public class Container extends AbstractProgram {
         if(children.size() == 0) return;
 
         if(verticalAlign){
-            programHeight = ((height - (PADDING*2)) / children.size());
+            programHeight = ((height - (PADDING)) / children.size()) - PADDING;
             yOffset = programHeight + PADDING;
         } else {
-            programWidth = ((width - (PADDING*2)) / children.size());
-            System.out.println(String.valueOf(programWidth) + " : " + String.valueOf(width - PADDING));
+            programWidth = ((width - (PADDING)) / children.size()) - PADDING;
             xOffset = programWidth + PADDING;
 
         }
