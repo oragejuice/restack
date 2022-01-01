@@ -8,12 +8,13 @@ import java.io.IOException;
 
 public class TWMGui extends GuiScreen {
 
-    TerminalNode masterNode;
     int screenHeight;
     int screenWidth;
+    Container rootNode;
 
     public TWMGui(){
-        masterNode = new TerminalNode(2,2, 100, 100, null);
+        rootNode = new Container(0,0,100,100, null);
+        rootNode.isRoot = true;
     }
 
     @Override
@@ -21,9 +22,9 @@ public class TWMGui extends GuiScreen {
         ScaledResolution res = new ScaledResolution(mc);
         screenWidth = res.getScaledWidth();
         screenHeight = res.getScaledHeight();
-        masterNode.setWidth(screenWidth - 4);
-        masterNode.setHeight(screenHeight - 4);
-        masterNode.draw(mouseX,mouseY);
+        rootNode.updatePos(0,0,screenWidth, screenHeight);
+        rootNode.draw(mouseX, mouseY);
+
     }
 
     @Override
@@ -32,15 +33,15 @@ public class TWMGui extends GuiScreen {
             mc.player.closeScreen();
             return;
         }
-        masterNode.keyTyped(typedChar, keyCode);
+
+        rootNode.keyTyped(typedChar, keyCode);
+
     }
 
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton){
-        masterNode.mouseClicked(mouseX, mouseY, mouseButton);
+        rootNode.mouseClicked(mouseX, mouseY, mouseButton);
     }
-
-
 
 }
