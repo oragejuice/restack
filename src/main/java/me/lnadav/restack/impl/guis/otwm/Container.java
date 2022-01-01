@@ -1,6 +1,7 @@
 package me.lnadav.restack.impl.guis.otwm;
 
 import net.minecraft.client.renderer.GlStateManager;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -19,20 +20,24 @@ public class Container extends AbstractProgram {
     }
 
     public void draw(int mX, int mY) {
-        drawRect(this.x + 1, this.y, this.x + this.width - 1, this.y + this.height - 1, new Color(255,100,100));
+        drawRect(this.x , this.y, this.x + this.width , this.y + this.height, new Color(255,100,100));
 
-        int programX = x + PADDING + 1;
-        int programY = y + PADDING + 1;
-        int programWidth = width - PADDING - 2;
-        int programHeight = height - PADDING - 2;
+        int programX = x + PADDING ;
+        int programY = y + PADDING ;
+        int programWidth = width - PADDING ;
+        int programHeight = height - PADDING ;
         int xOffset = 0;
         int yOffset = 0;
 
+        //weird bug, this seems to fix it
+        if(children.size() == 0) return;
+
         if(verticalAlign){
-            programHeight = (height / children.size()) - PADDING ;
+            programHeight = ((height - (PADDING*2)) / children.size());
             yOffset = programHeight + PADDING;
         } else {
-            programWidth = (width / children.size())  - PADDING;
+            programWidth = ((width - (PADDING*2)) / children.size());
+            System.out.println(String.valueOf(programWidth) + " : " + String.valueOf(width - PADDING));
             xOffset = programWidth + PADDING;
 
         }
@@ -46,12 +51,14 @@ public class Container extends AbstractProgram {
 
     }
 
-    public void addTerm(){
-        children.add(new Terminal(x, y, width, height,this));
+    public void addTerm(AbstractProgram program){
+        int i = (children.indexOf(program) + 1) % children.size();
+        children.add(i ,new Terminal(x, y, width, height,this));
     }
 
-    public void addContainer(){
-        children.add(new Container(x, y, width, height, this));
+    public void addContainer(AbstractProgram program){
+        int i = (children.indexOf(program) + 1) % children.size();
+        children.add(i, new Container(x, y, width, height, this));
     }
 
     public void killProcess(AbstractProgram program){
@@ -74,11 +81,18 @@ public class Container extends AbstractProgram {
     }
 
     public void keyTyped(char typedChar, int keyCode) {
+        if (TWMGui.isAltKeyDown() && focused) {
+            if (keyCode == Keyboard.KEY_Q && !isRoot) {
+                getParent().killProcess(this);
+            }
+
+
+        }
+
         for (AbstractProgram program : children) {
             program.keyTyped(typedChar, keyCode);
         }
     }
-
 
 
     public static void drawRect(float x1, float y1, float x2, float y2, Color color) {

@@ -31,19 +31,19 @@ public class Terminal extends AbstractProgram {
     public void keyTyped(char typedChar, int keyCode) {
         if(TWMGui.isAltKeyDown() && focused){
             if(keyCode == Keyboard.KEY_RETURN){
-                getParent().addTerm();
+                getParent().addTerm(this);
             }
 
             else if (keyCode == Keyboard.KEY_O){
-                getParent().addContainer();
+                getParent().addContainer(this);
             }
 
-            else if(keyCode == Keyboard.KEY_LSHIFT){
+            else if (keyCode == Keyboard.KEY_LSHIFT){
                 getParent().verticalAlign = !getParent().verticalAlign;
                 ClientChat.sendClientMessage("vertical align: " + String.valueOf(getParent().verticalAlign));
             }
 
-            else if(keyCode == Keyboard.KEY_Q){
+            else if (keyCode == Keyboard.KEY_Q){
                 getParent().killProcess(this);
             }
 
