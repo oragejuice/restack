@@ -10,6 +10,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
+
 public class GuiUtils implements Globals {
 
 
@@ -75,6 +77,52 @@ public class GuiUtils implements Globals {
         int H = 17;
         H += Restack.featureManager.getFeaturesFromCategory(category).size() * 20;
         return H;
+    }
+
+
+    public static void drawRect(float x1, float y1, float x2, float y2, Color color) {
+        applyColor(color);
+        drawRect(x1, y1, x2, y2);
+    }
+
+    private static void drawRect(float x1, float y1, float x2, float y2) {
+        enabledGL2D();
+        drawLine(x1, y1, x2, y1);
+        drawLine(x2, y1, x2, y2);
+        drawLine(x2, y2, x1, y2);
+        drawLine(x1, y2, x1, y1);
+        disabledGL2D();
+    }
+
+    private static void applyColor(Color color) {
+        GL11.glColor4f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
+    }
+
+    public static void drawLine(float x1, float y1, float x2, float y2, Color color) {
+        applyColor(color);
+        drawLine(x1, y1, x2, y2);
+    }
+
+    private static void drawLine(float x1, float y1, float x2, float y2) {
+        enabledGL2D();
+        GL11.glBegin(GL11.GL_LINES);
+        GL11.glVertex2d(x1, y1);
+        GL11.glVertex2d(x2, y2);
+        GL11.glEnd();
+        disabledGL2D();
+    }
+
+    public static void enabledGL2D() {
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableCull();
+    }
+
+    public static void disabledGL2D() {
+        GlStateManager.disableBlend();
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableCull();
+        GlStateManager.color(1f, 1f, 1f,1f);
     }
 
     public static String capFirstLetter(String string)

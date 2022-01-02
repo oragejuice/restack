@@ -1,5 +1,6 @@
 package me.lnadav.restack.impl.guis.otwm;
 
+import me.lnadav.restack.api.util.render.GuiUtils;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -20,12 +21,13 @@ public class Container extends AbstractProgram {
     }
 
     public void draw(int mX, int mY) {
-        drawRect(this.x , this.y, this.x + this.width , this.y + this.height, new Color(255,100,100));
+
+        GuiUtils.drawRect(this.x , this.y, this.x + this.width , this.y + this.height, new Color(255,100,100));
 
         int programX = x + PADDING ;
         int programY = y + PADDING ;
-        int programWidth = width - PADDING ;
-        int programHeight = height - PADDING ;
+        int programWidth = width - PADDING*2 ;
+        int programHeight = height - PADDING*2 ;
         int xOffset = 0;
         int yOffset = 0;
 
@@ -94,50 +96,7 @@ public class Container extends AbstractProgram {
     }
 
 
-    public static void drawRect(float x1, float y1, float x2, float y2, Color color) {
-        applyColor(color);
-        drawRect(x1, y1, x2, y2);
-    }
 
-    private static void drawRect(float x1, float y1, float x2, float y2) {
-        enabledGL2D();
-        drawLine(x1, y1, x2, y1);
-        drawLine(x2, y1, x2, y2);
-        drawLine(x2, y2, x1, y2);
-        drawLine(x1, y2, x1, y1);
-        disabledGL2D();
-    }
-
-    private static void applyColor(Color color) {
-        GL11.glColor4f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
-    }
-
-    public static void drawLine(float x1, float y1, float x2, float y2, Color color) {
-        applyColor(color);
-        drawLine(x1, y1, x2, y2);
-    }
-
-    private static void drawLine(float x1, float y1, float x2, float y2) {
-        enabledGL2D();
-        GL11.glBegin(GL11.GL_LINES);
-        GL11.glVertex2d(x1, y1);
-        GL11.glVertex2d(x2, y2);
-        GL11.glEnd();
-        disabledGL2D();
-    }
-
-    public static void enabledGL2D() {
-        GlStateManager.enableBlend();
-        GlStateManager.disableTexture2D();
-        GlStateManager.disableCull();
-    }
-
-    public static void disabledGL2D() {
-        GlStateManager.disableBlend();
-        GlStateManager.enableTexture2D();
-        GlStateManager.enableCull();
-        GlStateManager.color(1f, 1f, 1f,1f);
-    }
 
 
 }
