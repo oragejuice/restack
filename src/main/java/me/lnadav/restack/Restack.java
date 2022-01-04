@@ -51,7 +51,6 @@ public class Restack {
 
     @Mod.EventHandler
     public void onPostInit(FMLPostInitializationEvent event){
-
         System.out.println("Re:stack loaded");
         configHelper.loadConfig();
         configHelper.saveConfig();

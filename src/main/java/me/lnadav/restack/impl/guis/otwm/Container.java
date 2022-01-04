@@ -22,7 +22,8 @@ public class Container extends AbstractProgram {
 
     public void draw(int mX, int mY) {
 
-        GuiUtils.drawRect(this.x , this.y, this.x + this.width , this.y + this.height, new Color(255,100,100));
+        Color color = focused ? new Color(255,100,100) : new Color(255,255,255);
+        GuiUtils.drawRect(this.x , this.y, this.x + this.width , this.y + this.height, color);
 
         int programX = x + PADDING ;
         int programY = y + PADDING ;
@@ -100,17 +101,26 @@ public class Container extends AbstractProgram {
     }
 
     public void addContainer(AbstractProgram program){
+        program.focused = false;
         int i = (children.indexOf(program) + 1) % children.size();
         children.add(i, new Container(x, y, width, height, this));
     }
 
     public void killProcess(AbstractProgram program){
         children.remove(program);
+        if(children.isEmpty() && !isRoot){
+            getParent().killProcess(this);
+        }
     }
 
     @Override
     public boolean mouseClicked(int mouseX, int mouseY, int mouseButton) {
+
+        /*
+        *WHY IS EVERY SECOND ONE CONTAINER GETTING SELECTED ???
+         */
         boolean inGutters = true;
+
         for (AbstractProgram program : children){
             boolean isInTerm = program.mouseClicked(mouseX, mouseY, mouseButton);
 
@@ -120,13 +130,17 @@ public class Container extends AbstractProgram {
         }
 
         focused = inGutters && inside(mouseX, mouseY);
-        return focused;
+        //other programs dont care if its the container or its terms that are focused, as long as one of them are
+        return inside(mouseX, mouseY);
     }
 
     public void keyTyped(char typedChar, int keyCode) {
         if (TWMGui.isAltKeyDown() && focused) {
             if (keyCode == Keyboard.KEY_Q && !isRoot) {
                 getParent().killProcess(this);
+            }
+            else if( keyCode == Keyboard.KEY_RETURN){
+                children.add(new Terminal(x,y,width,height,this));
             }
 
 
