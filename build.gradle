@@ -25,7 +25,6 @@ sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = co
 minecraft {
     mappings channel: mappings_channel, version: mappings_version
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     runs {
         client {
@@ -61,8 +60,8 @@ dependencies {
         exclude module: 'gson'
     }
 
-    implementation 'com.moandjiezana.toml:toml4j:0.7.2'
-    compile 'club.minnced:java-discord-rpc:2.0.2'
+    embed 'com.moandjiezana.toml:toml4j:0.7.2'
+    embed 'club.minnced:java-discord-rpc:2.0.2'
 }
 
 processResources {
@@ -90,6 +89,7 @@ jar {
     }
 
     manifest {
+        attributes "FMLAT" : "accesstransformer.cfg"
         attributes "FMLCorePlugin": mod_core_plugin.replace('${mod_group}', mod_group).replace('${mod_id}', mod_id)
         attributes "FMLCorePluginContainsFMLMod": "false"
         attributes "ForceLoadAsMod": "true"
