@@ -3,6 +3,7 @@ package me.lnadav.restack.api.feature;
 import me.lnadav.restack.api.setting.AbstractSetting;
 import me.lnadav.restack.api.setting.AnnotationReflectionSearcher;
 import me.lnadav.restack.impl.features.client.ClickGUI;
+import me.lnadav.restack.impl.features.client.RPC;
 import me.lnadav.restack.impl.features.client.Watermark;
 import me.lnadav.restack.impl.features.combat.Aura;
 import me.lnadav.restack.impl.features.misc.TestFeature;
@@ -33,6 +34,7 @@ public class FeatureManager {
         features.add(new NCPSneak());
         features.add(new Aura());
         features.add(new TWMFeature());
+        features.add(new RPC());
 
         /*
          * Loads the Settings by using reflection, basically im super smart :D

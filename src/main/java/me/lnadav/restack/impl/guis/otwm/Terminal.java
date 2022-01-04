@@ -1,29 +1,34 @@
 package me.lnadav.restack.impl.guis.otwm;
 
 import me.lnadav.restack.api.util.Globals;
+import me.lnadav.restack.api.util.MathUtil;
 import me.lnadav.restack.api.util.render.font.FontUtil;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.util.ChatAllowedCharacters;
+
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Terminal extends AbstractProgram implements Globals {
 
-    private boolean focused = false;
+    //public boolean focused = false;
     private boolean isCapturing = false;
-    private String currentLine = getPS1();
+    private StringBuilder currentLine = new StringBuilder();
     private ArrayList<String> display = new ArrayList<>();
+    private ArrayList<StringBuilder> history = new ArrayList<>();
+    private int historyPointer = -1;
+    private int linePointer = 0;
 
     public Terminal(int x, int y, int width, int height, Container parent) {
         super(x, y, width, height, parent);
+        this.focused = true;
     }
 
     @Override
     public void draw(int mX, int mY) {
-        int termColor = new Color(79,79,79,255).getRGB();
+        int termColor = new Color(51, 51, 51,255).getRGB();
         Gui.drawRect(x, y, x + width, y + height, termColor);
 
 
@@ -32,15 +37,6 @@ public class Terminal extends AbstractProgram implements Globals {
         Gui.drawRect(x,y+height-1,x+width,y+height, borderColor.getRGB()); //bottom
         Gui.drawRect(x,y,x+1,y+height, borderColor.getRGB()); //left
         Gui.drawRect(x+width,y,x+width-1,y+height, borderColor.getRGB()); //right
-
-        /*
-        GL11.glPushMatrix();
-        GL11.glScissor(x+1, y+1, width-1, height-1); //SCISSOR
-        GL11.glEnable(GL11.GL_SCISSOR_TEST); //ENABLE SCISSOR
-
-         */
-
-        //ArrayList<String> nDisp = new ArrayList();
 
 
         int nOfLines = height / (FontUtil.getFontHeight() + 1);
@@ -54,29 +50,34 @@ public class Terminal extends AbstractProgram implements Globals {
             FontUtil.drawString(line, x+3, fY,new Color(255,255,255).getRGB());
             fY += FontUtil.getFontHeight() + 1;
         }
-        FontUtil.drawString(currentLine, x+3, fY, new Color(255,255,255).getRGB());
+        FontUtil.drawString(getPS1() + currentLine.toString(), x+3, fY, new Color(255,255,255).getRGB());
 
+        if((System.currentTimeMillis() / 500) % 2 == 1 && focused){
+            char selectedChar = currentLine.length() < 1 ? 'A' : currentLine.charAt(MathUtil.clamp(linePointer - 1, 0, currentLine.length()));
+            int charWidth = FontUtil.getStringWidth(String.valueOf(selectedChar));
+            int xSpace = FontUtil.getStringWidth(getPS1() + currentLine.substring(0, MathUtil.clamp(linePointer, 0, currentLine.length()))) + charWidth;
+            Gui.drawRect(x+xSpace,fY,x+xSpace + charWidth,fY+FontUtil.getFontHeight(),new Color(255,255,255).getRGB());
+        }
 
-        /*
-        GL11.glPopMatrix();
-        GL11.glDisable(GL11.GL_SCISSOR_TEST); //DISABLE SCISSOR
-        GL11.glPopMatrix();
-
-         */
     }
 
     @Override
     public boolean mouseClicked(int mouseX, int mouseY, int mouseButton) {
         focused = inside(mouseX, mouseY);
+        if(focused){
+            linePointer = 0;
+        }
         return focused;
     }
 
     @Override
     public void keyTyped(char typedChar, int keyCode) {
+
         //is TWM command
         if(TWMGui.isAltKeyDown() && focused){
             if(keyCode == Keyboard.KEY_RETURN){
                 getParent().addTerm(this);
+                this.focused = false;
             }
 
             else if (keyCode == Keyboard.KEY_O){
@@ -90,8 +91,12 @@ public class Terminal extends AbstractProgram implements Globals {
             else if (keyCode == Keyboard.KEY_Q){
                 getParent().killProcess(this);
             }
-
-
+             else if (keyCode == Keyboard.KEY_LEFT){
+                 getParent().focusLeft(this);
+            }
+            else if (keyCode == Keyboard.KEY_RIGHT){
+                getParent().focusRight(this);
+            }
 
         }
 
@@ -99,11 +104,64 @@ public class Terminal extends AbstractProgram implements Globals {
         else if(focused){
 
             if(keyCode == Keyboard.KEY_RETURN){
-                display.add(currentLine);
-                currentLine = getPS1();
+                display.add(getPS1() + currentLine.toString());
+                //if empty command just ignore
+                if(currentLine.length() != 0) history.add(0, currentLine);
+                currentLine = new StringBuilder();
+                linePointer = currentLine.length();
+                historyPointer = 0;
             }
 
-            currentLine += typedChar;
+            else if (keyCode == Keyboard.KEY_BACK){
+                //Will give index out of range if we dont do this check
+                //System.out.println(String.valueOf(linePointer) + " : linePointer - lineLength: " + String.valueOf(currentLine.length()));
+                if(linePointer <= currentLine.length() && linePointer > 0) {
+                    currentLine.deleteCharAt(linePointer -1);
+                    linePointer--;
+                }
+            }
+            else if (keyCode == Keyboard.KEY_UP){
+                if (historyPointer < history.size() - 1) {
+                    historyPointer++;
+                    currentLine = new StringBuilder(history.get(historyPointer).toString());
+                    linePointer =  MathUtil.clamp(linePointer, 0, currentLine.length());
+                }
+            }
+            else if (keyCode == Keyboard.KEY_DOWN){
+                if(historyPointer >= 0) {
+                    historyPointer--;
+                    if(historyPointer < 0) {
+                        currentLine.replace(0,currentLine.length(), "");
+                        linePointer = 0;
+                        linePointer =  MathUtil.clamp(linePointer, 0, currentLine.length());
+                        return;
+                    }
+                    currentLine = new StringBuilder(history.get(historyPointer).toString());
+                    linePointer =  MathUtil.clamp(linePointer, 0, currentLine.length());
+                } else {
+                    currentLine.replace(0,currentLine.length(), "");
+                    linePointer = 0;
+                    linePointer =  MathUtil.clamp(linePointer, 0, currentLine.length());
+                }
+            }
+            else if (keyCode == Keyboard.KEY_LEFT){
+                if(linePointer > 0) {
+                    linePointer--;
+                }
+            }
+            else if (keyCode == Keyboard.KEY_RIGHT){
+                if(linePointer < currentLine.length()) {
+                    linePointer++;
+                }
+            }
+
+            else {
+                if(ChatAllowedCharacters.isAllowedCharacter(typedChar)) {
+                    currentLine.insert(linePointer, typedChar);
+                    linePointer++;
+                }
+            }
+
         }
 
     }

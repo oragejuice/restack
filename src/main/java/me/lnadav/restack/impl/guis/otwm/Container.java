@@ -53,8 +53,50 @@ public class Container extends AbstractProgram {
     }
 
     public void addTerm(AbstractProgram program){
-        int i = (children.indexOf(program) + 1) % children.size();
+        int i = (children.indexOf(program) + 1) % (children.size() + 1);
         children.add(i ,new Terminal(x, y, width, height,this));
+    }
+
+    public void focusFirstTerm(){
+        children.get(0).focused = true;
+    }
+
+    public void focusRight(AbstractProgram program){
+        System.out.println("moved right");
+        program.focused = false;
+        if (isRoot){
+            int j = (children.indexOf(program) + 1) % children.size();
+            if(children.get(j) instanceof Container) ((Container) children.get(j)).focusFirstTerm();
+            else children.get(j).focused = true;
+        } else{
+            int i = children.indexOf(program) + 1;
+            if (i > children.size()){
+                getParent().focusRight(this);
+            } else {
+                if(children.get(i) instanceof Container) ((Container) children.get(i)).focusFirstTerm();
+                else children.get(i).focused = true;
+            }
+
+        }
+    }
+
+    public void focusLeft(AbstractProgram program){
+        System.out.println("moved left");
+        program.focused = false;
+        if (isRoot){
+            int j = Math.floorMod((children.indexOf(program) - 1), children.size());
+            if(children.get(j) instanceof Container) ((Container) children.get(j)).focusFirstTerm();
+            else children.get(j).focused = true;
+        } else{
+            int i = children.indexOf(program) - 1;
+            if (i < 0){
+                getParent().focusLeft(this);
+            } else {
+                if(children.get(i) instanceof Container) ((Container) children.get(i)).focusFirstTerm();
+                else children.get(i).focused = true;
+            }
+
+        }
     }
 
     public void addContainer(AbstractProgram program){
